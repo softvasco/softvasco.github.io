@@ -1,0 +1,36 @@
+title: Vasco Silva
+tagline: .NET, banking and payments
+description: Notes on .NET, banking and payments systems, written while building ledger-core and payee-match in the open.
+url: https://softvasco.github.io
+lang: en
+author:
+  name: Vasco Silva
+  url: https://softvasco.github.io/about/
+social:
+  name: Vasco Silva
+  links:
+    - https://github.com/softvasco
+    - https://www.linkedin.com/in/softvasco
+
+permalink: /:year/:month/:title/
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md
+  - LICENSE

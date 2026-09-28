@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<section class="intro">
+  <p>I'm a senior .NET backend engineer in Lisbon. I've spent 12+ years on systems for central and retail banks, and this year I'm building open-source versions of the problems I know best: a double-entry <a href="https://github.com/softvasco/ledger-core">ledger</a> and a <a href="https://github.com/softvasco/payee-match">Verification of Payee</a> matcher.</p>
+  <p>These are the notes I write along the way. Short, with real code.</p>
+</section>
+
+<ul class="posts">
+  {% for post in site.posts %}
+  <li>
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %b %Y" }}</time>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
