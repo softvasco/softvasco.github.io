@@ -2,19 +2,19 @@
 layout: default
 title: About
 permalink: /about/
-description: Vasco Silva, senior .NET backend engineer in Lisbon working on banking and payments systems.
+description: Vasco Silva, senior .NET backend engineer in Lisbon. APIs, event-driven systems and legacy modernisation.
 ---
 
 # About
 
-I'm Vasco, a senior .NET backend engineer based in Lisbon. For more than twelve years I've worked on software for central and retail banks: payments, event-driven architectures, legacy modernisation and the kind of regulated platforms where a rounding rule can end up in an audit.
+I'm Vasco, a senior .NET backend engineer based in Lisbon. I've spent more than twelve years building backend systems: APIs, event-driven services, integrations between systems that were never meant to talk to each other, and migrations of old applications onto current .NET. Most of that work was for central and retail banks, so I'm used to systems where correctness, audit trails and uptime aren't optional.
 
-This year I'm building a few of those problems in the open:
+This year I'm building open-source projects in public:
 
-- [payee-match](https://github.com/softvasco/payee-match): Verification of Payee name matching for .NET, following the EPC scheme that SEPA payment providers have had to support since October 2025.
-- [ledger-core](https://github.com/softvasco/ledger-core): an event-sourced, double-entry banking ledger in .NET 10.
+- [ledger-core](https://github.com/softvasco/ledger-core): an event-sourced, double-entry ledger in .NET 10, with CQRS, an outbox and a PostgreSQL event store.
+- [payee-match](https://github.com/softvasco/payee-match): name matching for .NET, built for the EU Verification of Payee check but useful anywhere two systems spell the same name differently.
 
-The design decisions for each one are written down as ADRs in the repos, and the interesting bits end up here.
+The design decisions for each one are written down as ADRs in the repos, and the parts that take more thought than expected end up here.
 
 Stack I use most: C#, .NET, ASP.NET Core, EF Core, SQL Server, PostgreSQL, Azure and Service Bus, with Rust and Python when they fit better.
 
