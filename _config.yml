@@ -27,6 +27,10 @@ plugins:
 defaults:
   - scope:
       path: ""
+    values:
+      image: /assets/cards/site.png
+  - scope:
+      path: ""
       type: posts
     values:
       layout: post
