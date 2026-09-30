@@ -4,8 +4,8 @@ layout: default
 <article>
   <h1>{{ page.title }}</h1>
   <p class="meta">
-    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
-    {% if page.repo %} · code in <a href="https://github.com/softvasco/{{ page.repo }}">{{ page.repo }}</a>{% endif %}
+    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time>
+    {% if page.repo %} · <a href="https://github.com/softvasco/{{ page.repo }}">{{ page.repo }}</a>{% endif %}
   </p>
   {{ content }}
 </article>
