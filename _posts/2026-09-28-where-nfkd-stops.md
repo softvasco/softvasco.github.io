@@ -1,16 +1,17 @@
 ---
 title: "Normalising payee names: where NFKD stops"
-description: "Unicode normalisation strips most accents for free. Then you meet ß, ø and ł."
+description: "NFKD removes most accents from a name. It does nothing for ß, ø or ł, so those need a small table."
 repo: payee-match
+image: /assets/cards/where-nfkd-stops.png
 ---
 
-Since 9 October 2025, every payment provider in the EU has had to check the payee name against the IBAN before a euro credit transfer goes out. That's Verification of Payee. The answer is one of four codes: match, close match, no match, or "can't check". The EPC scheme says how the two banks talk to each other, but for the matching itself it only gives guidelines.
+Since 9 October 2025, payment providers in the EU have to check the payee name against the IBAN before they send a euro credit transfer. This is Verification of Payee. The payee's bank answers with one of four codes: match, close match, no match, or check not possible. The EPC rulebook defines the messages between the two banks, but for the name matching it only gives guidelines, so each bank decides how to do it.
 
-I'm building an open matcher for this, [payee-match](https://github.com/softvasco/payee-match). The first step is boring on purpose: turn both names into something you can compare. "João Conceição" typed by the payer and "JOAO CONCEICAO" in the bank's records should look the same before any fuzzy logic runs.
+I'm writing an open-source matcher for .NET, [payee-match](https://github.com/softvasco/payee-match). Before any fuzzy matching, both names have to be brought to the same form, so that "João Conceição" typed by the payer and "JOAO CONCEICAO" in the bank's records compare as equal. This post is about that step.
 
-## The easy 90%
+## Removing accents
 
-.NET gives you most of it with Unicode normalisation. `NormalizationForm.FormKD` splits a letter with an accent into the base letter plus a separate combining mark. After that you drop anything in the `NonSpacingMark` category and the accents are gone.
+.NET does most of it. `string.Normalize(NormalizationForm.FormKD)` decomposes an accented letter into the base letter followed by a combining mark. Skip everything in the `NonSpacingMark` category and the accents are gone:
 
 ```csharp
 foreach (var c in name.Normalize(NormalizationForm.FormKD))
@@ -23,15 +24,15 @@ foreach (var c in name.Normalize(NormalizationForm.FormKD))
 }
 ```
 
-That one loop handles `ã`, `ç`, `ü`, `é`, `ñ`, and the Czech ones people usually forget, like `ř` and `ť`. "Dvořák Šťastný" comes out as "dvorak stastny".
+That covers ã, ç, ü, é and ñ, and Czech letters like ř and ť too. "Dvořák Šťastný" becomes "dvorak stastny".
 
-I picked KD over D on purpose. The K means compatibility, so it also flattens things that only look different: the `ﬁ` ligature becomes `f` and `i`, and full-width `ＡＢＣ` becomes plain `ABC`. You don't see those often in a banking app, but copy and paste from a PDF brings in all sorts.
+I used KD rather than D. The compatibility form also turns the `ﬁ` ligature into `f` and `i`, and full-width `ＡＢＣ` into `ABC`. You won't see either often in a payment form, but a name pasted from a PDF can bring them in.
 
-## The letters NFKD leaves alone
+## Letters with no accent to remove
 
-Then the tests with German, Nordic and Polish names start failing.
+The first German, Nordic and Polish names in the tests failed:
 
-| Input | After NFKD | What you want |
+| Input | After NFKD | Expected |
 |---|---|---|
 | Straße | Straße | strasse |
 | Søren | Søren | soren |
@@ -39,9 +40,9 @@ Then the tests with German, Nordic and Polish names start failing.
 | Ægir | Ægir | aegir |
 | Þórsson | Þorsson | thorsson |
 
-None of these are accented letters. `ß`, `ø`, `ł`, `æ` and `þ` are letters in their own right, so Unicode has no decomposition for them and there's nothing to strip. `ToLowerInvariant` doesn't help either. Lower-casing `ß` gives you `ß`.
+ß, ø, ł, æ and þ are letters of their own, not a base letter with an accent, so Unicode has no decomposition for them. Lower-casing doesn't touch them either: `"ß".ToLowerInvariant()` is still `"ß"`.
 
-So there's a small, explicit table for them:
+They go through a lookup table instead:
 
 ```csharp
 // letters that NFKD leaves alone because they aren't an accent on a base letter
@@ -52,20 +53,18 @@ private static readonly FrozenDictionary<char, string> Folds = new Dictionary<ch
 }.ToFrozenDictionary();
 ```
 
-It's short, and I like that it's short. Every entry is a decision someone can read and argue with, which matters for a check that has to be explained to a customer, or to an auditor.
+I kept it as an explicit list. A VoP result may have to be explained to a customer or an auditor, and with ten entries anyone can check exactly what was replaced.
 
-## Punctuation is not all the same
+## Splitting into words
 
-The last part is splitting into words, and two characters need special treatment.
+Next the name is split into tokens. Most punctuation just ends a word: hyphens, commas, `&`, repeated spaces. "Silva-Santos, Ana" becomes `silva santos ana`.
 
-Apostrophes join. "O'Neill" and "D'Almeida" are one word, and a payer might type them with a straight quote, a curly one or none at all. Dropping the apostrophe entirely gives `oneill` and `dalmeida` in every case.
+Apostrophes are different. O'Neill and D'Almeida should stay one word, and people type them with a straight quote, a curly one or nothing at all. Dropping the apostrophe gives `oneill` and `dalmeida` in every case.
 
-Dots split. It's tempting to treat "J.M. Silva" like "O'Neill" and glue it together, but then you get `jm silva` and throw away the fact that those were two initials. A later step matches initials against full given names ("J. M. Silva" against "João Manuel Silva"), so the normaliser keeps them apart: `j m silva`.
+At first I wanted dots to behave the same way, but then "J.M. Silva" becomes `jm silva` and the two initials are lost. A later step compares initials with full given names ("J. M. Silva" against "João Manuel Silva"), so dots split: `j m silva`.
 
-Everything else that isn't a letter or a digit ends the current word. Hyphens, commas, `&` and extra spaces all collapse, so "Silva-Santos, Ana" becomes `silva santos ana`.
+## Titles and company forms
 
-## What it doesn't do (yet)
+The normaliser knows nothing about names. After it runs, titles like "Dr" and company forms like "Lda" or "GmbH" are still there. A separate step removes them, and it keeps the legal form to one side instead of throwing it away, because "Silva Lda" and "Silva SA" are two different companies. I'll write about that one when the matcher uses it.
 
-This step deliberately doesn't know anything about names. It doesn't drop titles like "Dr", and it doesn't know that "Lda" and "Unipessoal" are Portuguese company forms. That comes next, with a list per country, because "Silva Lda" against "Silva, Unipessoal Lda" is a very different question from "Silva Construções SA" against "Silva Consultores SA".
-
-The normaliser and its tests are [on GitHub](https://github.com/softvasco/payee-match/blob/main/src/PayeeMatch.Core/Names/NameNormaliser.cs). If you have a name from your language that comes out wrong, I'd like to see it.
+The normaliser and its tests are in [NameNormaliser.cs](https://github.com/softvasco/payee-match/blob/main/src/PayeeMatch.Core/Names/NameNormaliser.cs). If a name in your language comes out wrong, please open an issue with it.
