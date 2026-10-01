@@ -1,11 +1,12 @@
 ---
-layout: default
+layout: page
+kicker: About
+heading: Vasco Silva
+lead: Senior .NET backend engineer in Lisbon
 title: About
 permalink: /about/
 description: Vasco Silva, senior .NET backend engineer in Lisbon. APIs, event-driven systems and legacy modernisation.
 ---
-
-# About
 
 I'm Vasco, a senior .NET backend engineer based in Lisbon. I've spent more than twelve years building backend systems: APIs, event-driven services, integrations between systems that were never meant to talk to each other, and migrations of old applications onto current .NET. Most of that work was for central and retail banks, so I'm used to systems where correctness, audit trails and uptime aren't optional.
 

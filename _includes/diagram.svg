@@ -1,0 +1,10 @@
+<svg class="diagram" viewBox="0 0 330 250" width="330" height="250" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2.5">
+    <rect x="10" y="100" width="80" height="44" rx="6"/><rect x="125" y="100" width="80" height="44" rx="6"/>
+    <rect x="240" y="30" width="80" height="44" rx="6"/><rect x="240" y="170" width="80" height="44" rx="6"/>
+    <path d="M90 122h35M205 115l35-55M205 129l35 55"/>
+  </g>
+  <g fill="currentColor" font-family="IBM Plex Mono, monospace" font-size="15" text-anchor="middle">
+    <text x="50" y="127">API</text><text x="165" y="127">events</text><text x="280" y="57">ledger</text><text x="280" y="197">outbox</text>
+  </g>
+</svg>

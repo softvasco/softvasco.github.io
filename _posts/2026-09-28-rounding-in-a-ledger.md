@@ -1,5 +1,6 @@
 ---
 title: "Why 0.05 × 0.5 is 0.02 in my ledger"
+kicker: "C# / decimal"
 description: "decimal.Round uses banker's rounding by default. How ledger-core uses it, and why amounts with too many decimals are rejected instead of rounded."
 repo: ledger-core
 image: /assets/cards/rounding-in-a-ledger.png

@@ -1,5 +1,6 @@
 ---
 title: "Normalising payee names: where NFKD stops"
+kicker: "C# / Unicode"
 description: "NFKD removes most accents from a name before fuzzy matching. It does nothing for ß, ø or ł, so those need a small table, and dots and apostrophes need their own rules."
 repo: payee-match
 image: /assets/cards/where-nfkd-stops.png
