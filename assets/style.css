@@ -1,4 +1,4 @@
-/* printed-report look: navy ink on white, red only for emphasis */
+/* navy panel like the banner, white page for reading */
 :root {
   --paper: #ffffff;
   --bar: #f2f4f7;
@@ -9,6 +9,10 @@
   --ochre: #8a4b00;
   --rule: #d4dae3;
   --code: #f4f6f9;
+  --panel: linear-gradient(160deg, #0a1e46 0%, #12357a 100%);
+  --panel-ink: #ffffff;
+  --panel-muted: #b9cdf5;
+  --hot: #ff5a5f;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
   --serif: "Source Serif 4", Georgia, serif;
 }
@@ -38,16 +42,18 @@ body {
   font-optical-sizing: auto;
 }
 
-.page {
-  max-width: 88rem;
-  margin: 0 auto;
-  padding: 0 1rem 3rem;
-}
+.page { min-height: 100vh; }
 
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { color: var(--red); }
 
-.side { font-family: var(--mono); font-size: .8rem; padding-top: 2rem; }
+.side {
+  background: var(--panel);
+  color: var(--panel-ink);
+  font-family: var(--mono);
+  font-size: .8rem;
+  padding: 2rem 1rem 1.2rem;
+}
 
 .side .name {
   display: block;
@@ -55,47 +61,47 @@ a:hover { color: var(--red); }
   font-size: 1.05rem;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--panel-ink);
   text-decoration: none;
-  padding-bottom: .5rem;
-  border-bottom: 3px double var(--ink);
 }
 
-.side .tag { color: var(--muted); margin: .6rem 0 1.6rem; }
-.side nav a, .side .projects a { display: block; color: var(--ink); text-decoration: none; padding: .15rem 0; }
-.side nav a:hover, .side .projects a:hover { color: var(--red); }
-.side .projects { margin-top: 1.8rem; padding-top: .8rem; border-top: 1px solid var(--rule); }
-.side .label { text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 .5rem; }
-.side .projects a { color: var(--accent); font-weight: 500; margin-top: .5rem; }
-.side .projects span { display: block; color: var(--muted); line-height: 1.4; }
+.side .name::after { content: ""; display: block; width: 3rem; height: 4px; background: var(--hot); margin-top: .6rem; }
+.side .tag { color: var(--panel-muted); margin: .7rem 0 1.6rem; }
+.side nav a, .side .projects a { display: block; color: var(--panel-ink); text-decoration: none; padding: .15rem 0; }
+.side nav a:hover, .side .projects a:hover { color: var(--hot); }
+.side .projects { margin-top: 1.8rem; padding-top: .8rem; border-top: 1px solid rgba(255, 255, 255, .2); }
+.side .label { text-transform: uppercase; letter-spacing: .1em; color: var(--hot); font-weight: 600; margin: 0 0 .5rem; }
+.side .projects a { font-weight: 600; margin-top: .5rem; }
+.side .projects span { display: block; color: var(--panel-muted); line-height: 1.4; }
+
+main { padding: 2rem 1rem 3rem; max-width: 72rem; }
 
 @media (min-width: 62rem) {
   .page {
     display: grid;
-    grid-template-columns: 14rem minmax(0, 1fr);
-    gap: 4.5rem;
-    padding: 0 4.5rem 3rem;
+    grid-template-columns: 17rem minmax(0, 1fr);
   }
 
   .side {
     position: sticky;
     top: 0;
-    align-self: start;
-    padding-top: 3rem;
+    height: 100vh;
+    padding: 3rem 2rem;
   }
 
-  main { padding-top: 3rem; }
+  main { padding: 3rem 4.5rem; }
 }
 
 @media (max-width: 61.99rem) {
-  .side { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; border-bottom: 3px double var(--ink); padding-bottom: .7rem; margin-bottom: 2rem; }
-  .side .name { border: 0; padding: 0; }
+  .side { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem 1rem; }
+  .side .name::after { display: none; }
   .side .tag { margin: 0; flex: 1; }
-  .side nav { display: flex; gap: 1rem; width: 100%; }
+  .side nav { display: flex; gap: 1rem; width: 100%; margin-top: .4rem; }
   .side .projects { display: none; }
 }
 
-h1 { font-size: 2.4rem; line-height: 1.15; font-weight: 600; letter-spacing: -.01em; margin: 0 0 .6rem; }
+h1 { font-size: 2.6rem; line-height: 1.12; font-weight: 700; letter-spacing: -.01em; margin: 0 0 .6rem; }
+article h1::after { content: ""; display: block; width: 5rem; height: 5px; background: var(--hot); margin-top: 1rem; }
 
 h2, h3 {
   font-family: var(--mono);
