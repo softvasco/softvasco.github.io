@@ -1,17 +1,17 @@
-/* navy panel like the banner, white page for reading */
+/* graphite panel like the banner, white page for reading */
 :root {
   --paper: #ffffff;
-  --bar: #f2f4f7;
-  --ink: #0c1b33;
-  --muted: #566175;
-  --accent: #0b3d91;
+  --bar: #f3f2ef;
+  --ink: #1a1a1a;
+  --muted: #5f5d58;
+  --accent: #a3302a;
   --red: #c8201a;
   --ochre: #8a4b00;
-  --rule: #d4dae3;
-  --code: #f4f6f9;
-  --panel: linear-gradient(160deg, #0a1e46 0%, #12357a 100%);
+  --rule: #dcdad5;
+  --code: #f5f4f1;
+  --panel: linear-gradient(160deg, #141414 0%, #2a2a2a 100%);
   --panel-ink: #ffffff;
-  --panel-muted: #b9cdf5;
+  --panel-muted: #bdbab2;
   --hot: #ff5a5f;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
   --serif: "Source Serif 4", Georgia, serif;
@@ -19,15 +19,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-  --paper: #0a1220;
-  --bar: #0f1a2c;
-  --ink: #e2e7ef;
-  --muted: #8e99ab;
-  --accent: #7fb0ff;
+  --paper: #121212;
+  --bar: #1c1c1c;
+  --ink: #ebe9e4;
+  --muted: #9a978f;
+  --accent: #ff8a7a;
   --red: #ff6b5e;
   --ochre: #e0b36a;
-  --rule: #22314a;
-  --code: #0f1a2c;
+  --rule: #2e2e2e;
+  --code: #1c1c1c;
   }
 }
 
